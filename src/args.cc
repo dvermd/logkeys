@@ -10,6 +10,7 @@
 #define _ARGS_H_
 
 #include <cstring>
+#include <set>
 
 namespace logkeys {
 
@@ -20,7 +21,7 @@ struct arguments
   bool us_keymap;      // use default US keymap, -u switch
   std::string logfile;      // user-specified log filename, -o switch
   std::string keymap;       // user-specified keymap file, -m switch or --export-keymap
-  std::string device;       // user-specified input event device, given with -d switch
+  std::set<std::string> devices;       // user-specified input event device, given with -d switch
   std::string http_url;     // remote HTTP URL to POST log to, --post-http switch
   std::string irc_entity;   // if --post-irc effective, this holds the IRC entity to PRIVMSG (either #channel or NickName)
   std::string irc_server;   // if --post-irc effective, this holds the IRC hostname
@@ -71,7 +72,7 @@ void process_command_line_arguments(int argc, char **argv)
       case 'o': args.logfile = optarg; break;
       case 'u': args.us_keymap = true; break;
       case 'k': args.kill = true;      break;
-      case 'd': args.device = optarg;  break;
+      case 'd': args.devices.insert(optarg);  break;
       
       case  0 : 
         args.flags |= flags;

@@ -416,12 +416,14 @@ int main(int argc, char **argv)
     determine_system_keymap();
   
   std::vector<std::string> results;
-  if (args.device.empty()) {  // no device given with -d switch
+  if (args.devices.empty()) {  // no device given with -d switch
     determine_input_device(results);
   } 
   else {  // event device supplied as -d argument
-    std::string::size_type i = args.device.find_last_of('/');
-    results.push_back((std::string(INPUT_EVENT_PATH) + args.device.substr(i == std::string::npos ? 0 : i + 1)));
+    for (std::set<std::string>::iterator it = args.devices.begin(); it != args.devices.end(); ++it) {
+      std::string::size_type i = it->find_last_of('/');
+      results.push_back((std::string(INPUT_EVENT_PATH) + it->substr(i == std::string::npos ? 0 : i + 1)));
+    }
   }
   
   set_signal_handling();
